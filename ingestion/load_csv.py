@@ -7,29 +7,33 @@ import shutil
 from pathlib import Path
 
 
-load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / '.env')
+
+(BASE_DIR / 'ingestion' / 'logs').mkdir(exist_ok=True)
 log.basicConfig(
     level=log.INFO,
-    filename='logs/load.log',
+    filename=BASE_DIR / 'ingestion' / 'logs' / 'load.log',
     format='%(asctime)s | %(levelname)s | %(message)s',
     datefmt='%d-%m-%Y %H:%M:%S'
 )
 
 
 def get_table_name(csv_file: str | Path) -> str:
+    """Преобразует название csv-файла в название таблицы в БД"""
     table_name = Path(csv_file).stem.split('_')
     if len(table_name) > 1 and table_name[-1].isdigit():
         table_name.pop()
     return '_'.join(table_name)
 
 
-def load_csv_to_db(db_url: str, path: str | Path = '../csv') -> None:
-    """Загружает все CSV из path в БД по db_url и перемещает их в папку to_delete"""
+def load_csv_to_db(db_url: str, path: str | Path = BASE_DIR / 'csv') -> None:
+    """Загружает все CSV из path в БД по db_url и перемещает их в папку archive"""
     path = Path(path)
 
-    to_delete_path = Path('../to_delete')
-    to_delete_path.mkdir(exist_ok=True)
+    archive_path = BASE_DIR / 'archive'
+    archive_path.mkdir(exist_ok=True)
 
     engine = create_engine(db_url)
 
@@ -47,9 +51,9 @@ def load_csv_to_db(db_url: str, path: str | Path = '../csv') -> None:
                     index=False
                 )
 
-            log.info(msg=f'{csv_file.name} is uploaded! Moving file in {to_delete_path} dir...')
+            log.info(msg=f'{csv_file.name} is uploaded! Moving file in {archive_path.name} dir...')
 
-            shutil.move(csv_file, to_delete_path)
+            shutil.move(csv_file, archive_path)
 
             log.info(msg=f'{csv_file.name} is moved')
         except Exception:
