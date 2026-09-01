@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / '.env')
 
-(BASE_DIR / 'ingestion' / 'logs').mkdir(exist_ok=True)
+(BASE_DIR / 'logs').mkdir(exist_ok=True)
 log.basicConfig(
     level=log.INFO,
     filename=BASE_DIR / 'ingestion' / 'logs' / 'load.log',
