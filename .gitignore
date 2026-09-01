@@ -4,3 +4,6 @@
 *.csv
 *.txt
 *.log
+*.json
+*.joblib
+*.pyc
