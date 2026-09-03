@@ -14,7 +14,7 @@ load_dotenv(BASE_DIR / '.env')
 (BASE_DIR / 'logs').mkdir(exist_ok=True)
 log.basicConfig(
     level=log.INFO,
-    filename=BASE_DIR / 'ingestion' / 'logs' / 'load.log',
+    filename=BASE_DIR / 'logs' / 'load.log',
     format='%(asctime)s | %(levelname)s | %(message)s',
     datefmt='%d-%m-%Y %H:%M:%S'
 )

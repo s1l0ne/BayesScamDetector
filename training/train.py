@@ -124,6 +124,11 @@ if __name__ == '__main__':
 
     log.info('Загрузка датасета из БД')
     df = load_dataset(engine)
+
+    conflicting = df.groupby('text')['label'].nunique().loc[lambda x: x > 1].index
+    df = df[~df['text'].isin(conflicting)]
+    df = df.drop_duplicates(subset='text')
+
     log.info('Датасет загружен')
 
     log.info('Разделение датасета на train/test')
@@ -138,7 +143,7 @@ if __name__ == '__main__':
     log.info('Модели обучены')
 
     log.info('Оценка моделей')
-    results = evaluate_models(models, X_test, y_test).sort_values(by='F1', ascending=False)
+    results = evaluate_models(models, X_test, y_test).sort_values(by='f1', ascending=False)
     log.info('Оценка моделей завершена')
 
     log.info(f'Запись результатов эксперимента в файл {RESULTS_FILE}')
