@@ -9,21 +9,18 @@ METADATA_JSON_PATH = BASE_DIR / 'models' / 'metadata.json'
 
 
 class ModelService:
-    def __init__(self, metadata_json_path = METADATA_JSON_PATH):
+    def __init__(self, metadata_json_path=METADATA_JSON_PATH):
         with open(metadata_json_path, 'r', encoding='utf-8') as file:
             self.metadata = json.load(file)
 
         self.current_model_name = self.models()[0]
         self.model = joblib.load(MODELS_DIR / self.metadata[self.current_model_name]['file'])
 
-
     def models(self) -> tuple:
         return tuple(model_name for model_name in self.metadata)
 
-
     def model_data(self, model_name: str):
         return self.metadata[model_name]
-
 
     def set_model(self, model_name: str):
         if model_name not in self.models():
@@ -31,6 +28,7 @@ class ModelService:
 
         self.current_model_name = model_name
         self.model = joblib.load(MODELS_DIR / model_name)
+
 
 if __name__ == '__main__':
     model_service = ModelService()
