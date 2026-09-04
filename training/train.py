@@ -19,6 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 TABLE_NAME = 'scam'
 RESULTS_FILE = 'train_results.txt'
 MODELS_DIR = BASE_DIR / 'models/'
+MODELS_DIR.mkdir(exist_ok=True)
 
 load_dotenv(BASE_DIR / '.env')
 
