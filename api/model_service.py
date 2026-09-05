@@ -27,7 +27,7 @@ class ModelService:
             raise ValueError("Model with such name doesn't exists")
 
         self.current_model_name = model_name
-        self.model = joblib.load(MODELS_DIR / model_name)
+        self.model = joblib.load(MODELS_DIR / self.metadata[model_name]['file'])
 
 
 if __name__ == '__main__':
